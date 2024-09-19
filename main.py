@@ -1,5 +1,5 @@
 from datamanager import DataMenager
-
+from thread import ThreadBursatil
 host='192.168.1.10'
 user='root'
 password='123456'
@@ -10,7 +10,7 @@ url =""
 data = DataMenager(host=host,user=user,password=password,db=db,port=port)
 
 def main():
-    getData(data,url)
+    x=ThreadBursatil()
 
 if __name__ == "__main__":
     main()
