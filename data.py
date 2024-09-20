@@ -11,7 +11,18 @@ warnings.filterwarnings("ignore", category=DeprecationWarning)
 chrome_options = Options()
 chrome_options.add_argument('--ignore-certificate-errors')  # Ignora errores SSL
 chrome_options.add_argument('--ignore-ssl-errors')
+from datetime import datetime
 
+from datamanager import DataMenager
+from thread import ThreadBursatil
+host='192.168.1.10'
+user='root'
+password='123456'
+db='mercado'
+port=3307
+url =""
+
+data = DataMenager(host=host,user=user,password=password,db=db,port=port)
 
 # Configuración de Selenium y ChromeDriver
 try:
@@ -72,8 +83,18 @@ try:
 
         # Mostrar los datos extraídos (opcional)
         for bono in bonos:
-            stringInsert = f'INSERT INTO cotizaciones (Especie,Cotizacion Fecha,Hora) values ({bono["Especies"]},{bono["Ultimo"]},{bono["Hora"]})'
-            print(f'Especie: [{bono["Especie"]}]   Cotización: [{bono["Último"]}] Hora:[{bono["Hora"]}]  Fecha: [{bono["Fecha"]}]')
+            #print("antes del string ")
+            #stringInsert = (f'INSERT INTO cotizaciones (Especie,Cotizacion, Fecha,Hora) values ({bono["Especies"]},{bono["Ultimo"]},{bono["Hora"]})')
+            ultimo_valor = bono["Último"].replace(".", "")
+            ultimo_valor = float(ultimo_valor.replace(",", "."))
+            print(f"valor ultimo  {ultimo_valor}"  )
+            sentencia = (
+                f'INSERT INTO cotizaciones (Especie, Cotizacion, Fecha, Hora) '
+                f'VALUES ("{bono["Especie"]}", {ultimo_valor}, "{datetime.today().date()}", "{bono["Hora"]}")'
+            ) 
+            #print(f'String insert {stringInsert}')
+            data.insertAny(sentencia=sentencia)
+           #print(f'Especie: ["{bono["Especie"]}"]   Cotización: ["{bono["Último"]}"] Hora:["{bono["Hora"]}"]  Fecha: ["{datetime.today().date()}"]')
 except Exception as e:
     print(f"Error al procesar los datos de la página: {e}")
 

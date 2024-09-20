@@ -9,10 +9,12 @@ class DataMenager:
 			print ("ocurrio un errro al conectar: ",e)
 			self.connexion.close
 		
-	def insertAny(self,setencia):
+	def insertAny(self,sentencia):
+		print(f'sentencia {sentencia}')
 		try:
 			with self.connexion.cursor() as cursor:
-				cursor.execute(setencia)
+				cursor.execute(sentencia)
+				cursor.connection.commit()
 		except  (pymysql.err.OperationalError, pymysql.err.InternalError) as e:
 			print("error insertando datos.")
 
